@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Embedded YouTube Video</title>
+    <h1>Embedded YouTube Video</h1>
+</head>
+<body>
+    <p>As of 11/8/2023, the YouTube Embed viewer doesn't play ads. So I made this tool to block ads without an adblocker.</p>
+    <p>Although an adblocker is better than this tool. I personally recommend uBlock Origin or Brave Shields. Both should be able to block YouTube ads.</p>
+
+    <div>
+        <p>Enter a YouTube Video ID or URL:</p>
+        <input type="text" id="video-id-input" placeholder="e.g., youtube.com/watch?v=VIDEO_ID">
+        <button onclick="embedVideo()">Submit</button>
+    </div>
+
+    <div id="format-examples">
+        <p>Supported URL Formats:</p>
+        <ul>
+            <li>https://youtube.com/watch?v=VIDEO_ID</li>
+            <li>youtube.com/watch?v=VIDEO_ID</li>
+            <li>http://youtube.com/watch?v=VIDEO_ID</li>
+            <li>https://*.youtube.com/watch?v=VIDEO_ID</li>
+            <li>https://youtu.be/watch?v=VIDEO_ID</li>
+            <li>youtu.be/watch?v=VIDEO_ID</li>
+            <li>http://youtu.be/watch?v=VIDEO_ID</li>
+            <li>https://*.youtu.be/watch?v=VIDEO_ID</li>
+            <li>watch?v=VIDEO_ID</li>
+            <li>VIDEO_ID (Video ID only)</li>
+        </ul>
+    </div>
+
+    <div id="video-container" style="display: none;">
+        <iframe id="youtube-iframe" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <p>All videos played belongs to its copyright holder.</p>
+    <p>Copyright (c) 2023 LeeHansHinLun. All Rights Reserved.</p>
+    <p>Source Code is available on</p>
+
+    <script>
+        function extractVideoId(input) {
+            // Check if the input is already a valid video ID
+            if (/^[A-Za-z0-9_-]{11}$/.test(input)) {
+                return input;
+            }
+
+            // Regular expression to extract video ID from different URL formats
+            const regex = /[?&]v=([a-zA-Z0-9_-]{11})|([a-zA-Z0-9_-]{11})/;
+            const match = input.match(regex);
+            if (match) {
+                return match[1] || match[2];
+            } else {
+                return null;
+            }
+        }
+
+        function embedVideo() {
+            const inputElement = document.getElementById("video-id-input");
+            const videoId = extractVideoId(inputElement.value);
+            if (videoId) {
+                const iframeElement = document.getElementById("youtube-iframe");
+                iframeElement.src = `https://www.youtube.com/embed/${videoId}`;
+                document.getElementById("video-container").style.display = "block";
+            } else {
+                alert("Invalid YouTube video ID or URL format.");
+            }
+        }
+    </script>
+</body>
+</html>
